@@ -8,31 +8,16 @@ from scipy import stats
 from scipy import special
 ######################################################
 #CONVERTING DATES TO NUMBERS****
-dates = np.array(['09/19/1980','03/15/1996','03/29/2000','10/16/2000',
-	'03/06/2001','07/11/2002','09/09/1997','1/28/2008',
-	'05/28/2004','10/25/2007','04/26/2006','07/08/2013'])
 
-dates2 = np.array(['09/19/1981','03/15/1997','03/29/2000','10/16/2000',
+dates = np.array(['09/19/1981','03/15/1997','03/29/2000','10/16/2000',
 	'03/06/2002','07/11/2003','09/09/1998','1/28/2009',
 	'05/28/2004','10/25/2007','04/26/2006','07/08/2014'])
 
-
-x = [[0 for i in range(6)] for i in range(len(dates))]
 x2 = [[0 for i in range(6)] for i in range(len(dates))]
-y = dates[0].split('/')
-y2 = dates2[0].split('/')
-print(y)
-for i in range(len(dates)):
-	y = dates[i].split('/')
-	x[i][0] = int(y[0])
-	x[i][1] = int(y[1])
-	x[i][2] = int(y[2])
-	x[i][3] = 0
-	x[i][4] = 0
-	x[i][5] = 0
+
 	
-for i in range(len(dates2)):
-	y2 = dates2[i].split('/')
+for i in range(len(dates)):
+	y2 = dates[i].split('/')
 	x2[i][0] = int(y2[0])
 	x2[i][1] = int(y2[1])
 	x2[i][2] = int(y2[2])
@@ -45,31 +30,13 @@ def year_fraction(date):
     year_length = dt.date(date.year+1, 1, 1).toordinal() - start
     return date.year + float(date.toordinal() - start) / year_length
 
-finale = [0 for i in range(len(dates))]
-for i in range(len(finale)):
-	finale[i] = year_fraction(dt.datetime(x[i][2],x[i][0],x[i][1],x[i][3],x[i][4],x[i][5]))
-
-final = [0 for i in range(len(dates2))]
-for i in range(len(finale)):
+final = [0 for i in range(len(dates))]
+for i in range(len(final)):
 	final[i] = year_fraction(dt.datetime(x2[i][2],x2[i][0],x2[i][1],x2[i][3],x2[i][4],x2[i][5]))
 
 
-
-
 final = np.array(final)
-finale = np.array(finale)
-'''
-finale[0] = final[0] +1
-finale[1] = final[1] +1
-finale[6] = final[6] +1
-finale[4] = final[4] +1
-finale[5] = final[5] +1
-finale[11] = final[11] +1
-finale[7] = final[7] +1
 
-final = finale
-
-'''
 #print(final)
 ########################################
 ##########ERROR PLOT OF G VS DATES
@@ -82,7 +49,6 @@ sigma_G = np.array([0.0005, 0.0007, 0.000092, 0.00040, 0.00098, 0.00027,
  0.0009, 0.00021, 0.00014, 0.00016,0.00013, 0.00099])
 
 sigma_G = sigma_G*1e-11
-
 
 
 ###########################################################
@@ -122,11 +88,9 @@ def BIC(l,k):
 
 popt,pcov = curve_fit(model1,final,G,sigma=sigma_G)#crve
 print(popt)
-#H1 = 6.766*1e-11#not including
 H1 = 6.6741*1e-11
 H2 = np.array([1.64*1e-14, -0.07, 5.9, 6.674*1e-11])
 H3 = np.array([1.9*1e-14, 0.0011, 7.57, 6.571*1e-11])
-#H4 = np.array([1.9*1e-14,0.0011,7.57,6.571*1e-11])#not including
 ##################
 ########chi2
 
@@ -160,7 +124,7 @@ y0 = model1(x0,popt[0],popt[1],popt[2],popt[3])
 y1 = model1(x0,H2[0],H2[1],H2[2],H2[3])
 y2 = model2(x0,H1)
 
-plt.plot(x0,y0, label = 'Hypothesis H4')
+plt.plot(x0,y0, label = 'Model derived from curve-fit')
 plt.plot(x0,y2, label = 'Constant Model')
 plt.xlabel("dates")
 plt.ylabel("Obtained value of G")
@@ -168,12 +132,13 @@ plt.legend()
 print("\n \n")
 plt.figure(2)
 plt.errorbar(final, G, yerr=sigma_G,fmt=".m", capsize = 2, label = 'Obtained data set')
-plt.plot(x0,y1, label = 'Sinusoid Model')
-plt.plot(x0,y2, label = 'Constant Model')
+plt.plot(x0,y1, label = 'Hypothesis 3')
+plt.plot(x0,y2, label = 'Hypothesis 2')
 plt.xlabel("dates")
 plt.ylabel("Obtained value of G")
 plt.legend()
 
 
 plt.show()
+
 
