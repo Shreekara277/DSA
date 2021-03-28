@@ -132,13 +132,11 @@ plt.legend()
 print("\n \n")
 plt.figure(2)
 plt.errorbar(final, G, yerr=sigma_G,fmt=".m", capsize = 2, label = 'Obtained data set')
-plt.plot(x0,y1, label = 'Hypothesis 3')
-plt.plot(x0,y2, label = 'Hypothesis 2')
+plt.plot(x0,y1, label = 'Sinusoid model')
+plt.plot(x0,y2, label = 'constant model')
 plt.xlabel("dates")
 plt.ylabel("Obtained value of G")
 plt.legend()
 
 
 plt.show()
-
-
